@@ -131,11 +131,23 @@ alias gb="git branch $@"
 
 alias gr="git rebase $@"
 
+alias gfd= "git fetch origin development:development"
+
 alias gfr="git fetch origin development:development && git rebase development"
 
-alias ios="cd ~/starling-projects/ios/MobileApp"
+alias grd="git rebase origin/development"
+
+alias ios="cd starling-projects/ios/MobileApp"
 
 alias projects="cd ~/projects"
+
+list_xcode_provisioning_profiles() {
+    while IFS= read -rd '' f; do
+        2> /dev/null /usr/libexec/PlistBuddy -c 'Print :Entitlements:application-identifier' /dev/stdin \
+            <<< $(security cms -D -i "$f")
+
+    done < <(find "$HOME/Library/MobileDevice/Provisioning Profiles" -name '*.mobileprovision' -print0)
+}
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
